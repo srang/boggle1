@@ -3,13 +3,13 @@
 #include <string.h>
 
 struct boggleDataNode {
-   char data[3];
-   struct boggleDataNode* nextData;
+  char data[3];
+  struct boggleDataNode* nextData;
 };//struct 1
 
 struct boggleDieSideNode {
-   char dieSideData[3];
-   struct boggleDieSideNode* nextSide;
+  char dieSideData[3];
+  struct boggleDieSideNode* nextSide;
 };//struct 2
 
 
@@ -19,71 +19,53 @@ void displayNodes(struct boggleDataNode *boggleDataHead);
 
 
 int main (int argc, char* argv[]){
-
-struct boggledataNode* root = NULL;
-
-struct boggleDataNode *boggleDataHead = NULL;
-struct boggleDieSideNode *boggleDieSideHead = NULL;
-//struct boggleDataNode *root = NULL;
-
-readDataFile (&boggleDataHead);
-
-displayNodes (&boggleDataHead);
-
-system("pause");
-return 0;
+  struct boggleDataNode *boggleDataHead = NULL;
+  //struct boggleDieSideNode *boggleDieSideHead = NULL;
+  readDataFile (boggleDataHead);
+  displayNodes (boggleDataHead);
+  return 0;
 }//main
-
-
 
 void readDataFile (struct boggleDataNode *boggleDataHead)
 {
   FILE *fp;
   char data[3];
-  fp = fopen("BoggleData.txt","r");
+  fp = fopen("boggle.txt","r");
   int i;
-  for (i=0; i < 96; i++)
-  {
-
-      fscanf(fp,"%s", data);
-
-      addDataNode(data,boggleDataHead);
+  for (i=0; i < 96; i++) {
+    fscanf(fp,"%s", data);
+    addDataNode(data,boggleDataHead);
   }//for
-
 }//ReadDataFile
 
 void addDataNode (char tempdata[], struct boggleDataNode *boggleDataHead) {
-
-   struct boggleDataNode *node = malloc(sizeof (struct boggleDataNode));
-   strcpy(node->data, tempdata);
-
-   if (boggleDataHead == NULL){
-       boggleDataHead = node;
-       boggleDataHead->nextData = NULL;
-   }//if
-  else {
-      strcpy(node->data,tempdata);
-       node->nextData = NULL;
-       printf("%s ", tempdata);
-    //   printf("%s\n",tempdata);
-   }//else
+  struct boggleDataNode *node = malloc(sizeof (struct boggleDataNode));
+  if (boggleDataHead == NULL) {
+    printf("1\n");
+    boggleDataHead = &node;
+    strcpy(node->data,tempdata);
+    boggleDataHead->nextData = NULL;
+  } else {
+    printf("2\n");
+    strcpy(node->data,tempdata);
+    node->nextData = NULL;
+    printf("%s\n",node->data);
+  }//else
 }//addDataNode
 
 void displayNodes(struct boggleDataNode *boggleDataHead){
-   struct boggleDataNode *t = boggleDataHead;
+  struct boggleDataNode *t = boggleDataHead;
 
-   int counter = 0;
-   int i = 0;
+  int counter = 0;
 
-   while (counter!=16)
-   {
-   printf("\n\nDice Number %d\n",counter);
+  while (counter!=16) {
+    printf("\n\nDice Number %d\n",counter);
+    int i = 0;
 
-      for (i=0;i<6;i++){
-           printf("%s\n", *t->data);
-           t=t->data;
-     //      printf("%i ",i);// Test Statement
-      }//if
-     counter++;
-   }//while
+    for (i=0;i<6;i++) {
+      printf("%s\n", t->data);
+      t=t->nextData;
+    }//if
+    counter++;
+  }//while
 }//display function
