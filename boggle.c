@@ -22,7 +22,7 @@ int main (int argc, char* argv[]){
   struct boggleDataNode *boggleDataHead = NULL;
   //struct boggleDieSideNode *boggleDieSideHead = NULL;
   readDataFile (boggleDataHead);
-  displayNodes (boggleDataHead);
+  displayNodes (boggleDataHead); 
   return 0;
 }//main
 
@@ -30,7 +30,7 @@ void readDataFile (struct boggleDataNode *boggleDataHead)
 {
   FILE *fp;
   char data[3];
-  fp = fopen("boggle.txt","r");
+  fp = fopen("BoggleData.txt","r");
   int i;
   for (i=0; i < 96; i++) {
     fscanf(fp,"%s", data);
@@ -42,7 +42,7 @@ void addDataNode (char tempdata[], struct boggleDataNode *boggleDataHead) {
   struct boggleDataNode *node = malloc(sizeof (struct boggleDataNode));
   if (boggleDataHead == NULL) {
     printf("1\n");
-    boggleDataHead = &node;
+    boggleDataHead = node;
     strcpy(node->data,tempdata);
     boggleDataHead->nextData = NULL;
   } else {
@@ -53,19 +53,13 @@ void addDataNode (char tempdata[], struct boggleDataNode *boggleDataHead) {
   }//else
 }//addDataNode
 
-void displayNodes(struct boggleDataNode *boggleDataHead){
-  struct boggleDataNode *t = boggleDataHead;
-
-  int counter = 0;
-
-  while (counter!=16) {
-    printf("\n\nDice Number %d\n",counter);
+void displayData(struct boggleDataNode *boggleDataHead)
+{
+    struct boggleDataNode *t = boggleDataHead;
     int i = 0;
+    for (i=0; i<96; i++){
+        printf("\n%s",t->data);// I NEED TO KNOW WHAT GOES HERE
+       //t = t->nextData;   // THIS LINE OF CODE MESSES WITH EVERYTHING
+    }//for
 
-    for (i=0;i<6;i++) {
-      printf("%s\n", t->data);
-      t=t->nextData;
-    }//if
-    counter++;
-  }//while
-}//display function
+}//DisplayData function
