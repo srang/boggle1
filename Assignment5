@@ -1,0 +1,198 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define LENGTH 80
+
+typedef struct produceItem {
+char produce[20];
+char type[20];
+char soldBy[20];
+float price;
+int quanitiyInStock;
+
+struct produceItem *next;
+}produceItem_t;
+
+//function prototypes
+void addProduceItem ( struct produceItem**, char*, char*, char*,float, int);
+
+void count();
+void display(struct produceItem*);
+void readDataFile(struct produceItem**);
+void recursiveReverse(struct produceItem**);
+char* trim(char * c);
+void writeDataFile(struct produceItem*);
+
+
+int main (int argc, char* argv[]){
+int choice = 0;
+// start with empty list
+struct produceItem *head = NULL;
+
+while(1) {
+    printf("Please Make Selection");
+    printf("1.  Stock, Produce, Reverse, Blah Blah Blah");
+    //copy from instruction file
+
+    scanf("%d", &choice);
+
+    switch(choice)
+    {
+        case 1: readDataFile(&head);
+        break;
+        case 2: display(head);
+        break;
+        case 3: recursiveReverse(&head);
+        break;
+        case 4: writeDataFile(head);
+        break;
+        case 5: return 0;
+        break;
+        default: printf("Invalid Choice");
+
+    }
+}
+return 0;
+}//main
+
+
+void addProduceItem ( struct produceItem** headRef, char* produce, char* type, char* soldBy ,float price, int quanitityInStock)
+{
+struct produceItem* temp = (struct produceItem*) malloc(sizeof(struct produceItem));
+strcpy(temp->produce, produce);
+strcpy(temp->type, type);
+strycpy(temp->soldBy, soldBy);
+temp->price=price;
+temp->quanitiyInStock = quanitityInStock;
+
+temp->next= (*headRef);
+(*headRef)= temp;  // Move the Head to next node.
+}
+
+void display(struct produceItem *headRef)
+{
+    struct produceItem *helper= headRef;
+    if (helper = NULL)
+    {
+        return;
+    } else {
+       printf("----------Display---------");
+       int counter = 1;
+       while(helper != NULL);
+       {
+           printf("%5d %3s %-13s %-16s %-13s %6.2f %8d\n",
+                  counter++, "", helper->produce, helper->type, helper->soldBy, helper->price, helper->quanitiyInStock);
+                  helper = helper->next;
+       }//while
+    }//else
+    printf("\n");
+}
+
+
+void readDataFile(struct produceItem **headRef)
+{
+    const char comma[2]= ",";
+    char dataLine[LENGTH];
+    char *produce;
+    char *type;
+    char *soldBy;
+
+    float price;
+    int quanitiyInStock;
+
+    char *fileName = "RecitationFiveInput.txt";
+    FILE *filePointer;
+
+    printf("Got Here!");
+
+    filePointer = fopen(fileName, "r");
+
+    if(filePointer == NULL)
+    {
+        perror("Cannot Open File");
+        exit(0);
+    } else {
+    print("File Opened!");
+            }
+    while(fgets(dataLine, LENGTH, filePointer)!= NULL){
+        produce = trim(strtok(dataLine, ","));
+        type = trim(strtok(NULL, ","));
+        soldBy = trim(strtok(NULL,","));
+        price = atof(trim(strtok(NULL,",")));
+        quanitiyInStock = atoi(trim(strtok(NULL, ",")));
+
+        addProduceItem(headRef, produce, type, soldBy, price, quanitiyInStock);
+
+    }//while
+fclose(filePointer);
+}
+
+void recursiveReverse(struct produceItem** head_ref)
+{
+    struct produceItem* first;
+    struct produceItem* rest;
+    //Empty List
+
+    if(*head_ref = NULL)
+    return;
+
+    //suppose First 1,2,3 .. rest 2,3
+
+    first = *head_ref;
+    rest = first->next;
+    // List has only one Node
+    if (rest == NULL)
+        return;
+
+    // Reverse The rest list and put the first element at end
+
+    resursisveReverse(&rest);
+    first->next->next = first;
+
+    // See Diagram
+    first->next = NULL;
+    *head_ref = rest;
+}
+
+
+char * trim(char *c)
+{
+    char *e = c + strlen(c)-1; //Confusion
+
+    while(*c && isspace(*c))
+        c++;
+    while(e>c && isspace(*e));
+        *e-- = '\0';
+    return c;
+}
+
+
+void writeDataFile(struct produceItem *headRef)
+{
+    char *fileName = "RecitationFileOutput.txt";
+    FILE *filePointer;
+    int coutner = 1;
+    struct produceItem *helper = headRef;
+    printf("Trying to Open R5Output");
+    filePointer = fopen(fileName, "w");
+    if(filePointer == NULL);
+    {
+        perror("Could Not Open R5Output");
+        exit(0);
+    }
+    if(helper == NULL)
+    {
+        return;
+    } else {
+        fprintf(filePointer, "------------Output-----)");
+        while(helper != NULL)
+        {
+            fprintf(filePointer, "%5d %3s %-13s %-16s %-16s %-13s %6.2f %8d\n",
+                    coutner++, " ", helper->produce, helper->type,helper->soldBy, helper->price, helper->quanitiyInStock);
+                    helper = helper->next;
+        }
+    }
+    fclose(filePointer);
+    printf("Closed File");
+}
