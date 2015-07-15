@@ -30,15 +30,15 @@ int choice = 0;
 // start with empty list
 struct produceItem *head = NULL;
 
-while(1) {
-    printf("Please Make Selection");
-    printf("1.  Stock, Produce, Reverse, Blah Blah Blah");
+while(choice != 5) {
+    printf("Please Make Selection\n");
+    printf("1. Stock, Produce Department\n2: Display Produce Inventory\n3: Reverse Order of Produce Inventory\n4: Export Produce Inventory\n5: Exit Program\n");
     //copy from instruction file
 
     scanf("%d", &choice);
 
-    switch(choice)
-    {
+    switch(choice){
+
         case 1: readDataFile(&head);
         break;
         case 2: display(head);
@@ -51,7 +51,9 @@ while(1) {
         break;
         default: printf("Invalid Choice");
 
+
     }
+choice = 0;
 }
 return 0;
 }//main
@@ -68,6 +70,7 @@ temp->quanitiyInStock = quanitityInStock;
 
 temp->next= (*headRef);
 (*headRef)= temp;  // Move the Head to next node.
+return;
 }
 
 void display(struct produceItem *headRef)
@@ -104,7 +107,7 @@ void readDataFile(struct produceItem **headRef)
     char *fileName = "RecitationFiveInput.txt";
     FILE *filePointer;
 
-    printf("Got Here!");
+
 
     filePointer = fopen(fileName, "r");
 
@@ -113,7 +116,7 @@ void readDataFile(struct produceItem **headRef)
         perror("Cannot Open File");
         exit(0);
     } else {
-    printf("File Opened!");
+    printf("\nFile Opened!\n");
             }
     while(fgets(dataLine, LENGTH, filePointer)!= NULL){
         produce = trim(strtok(dataLine, ","));
@@ -121,9 +124,10 @@ void readDataFile(struct produceItem **headRef)
         soldBy = trim(strtok(NULL,","));
         price = atof(trim(strtok(NULL,",")));
         quanitiyInStock = atoi(trim(strtok(NULL, ",")));
+        printf("Item Loaded! Tossing to ProduceItem List!");
 
         addProduceItem(headRef, produce, type, soldBy, price, quanitiyInStock);
-
+        printf("Item Loaded to List!");
     }//while
 fclose(filePointer);
 }
@@ -174,11 +178,11 @@ void writeDataFile(struct produceItem *headRef)
     FILE *filePointer;
     int coutner = 1;
     struct produceItem *helper = headRef;
-    printf("Trying to Open R5Output");
+    printf("Trying to Open Output");
     filePointer = fopen(fileName, "w");
     if(filePointer == NULL);
     {
-        perror("Could Not Open R5Output");
+        printf("\nCould Not Open Output");
         exit(0);
     }
     if(helper == NULL)
