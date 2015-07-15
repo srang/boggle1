@@ -62,7 +62,7 @@ void addProduceItem ( struct produceItem** headRef, char* produce, char* type, c
 struct produceItem* temp = (struct produceItem*) malloc(sizeof(struct produceItem));
 strcpy(temp->produce, produce);
 strcpy(temp->type, type);
-strycpy(temp->soldBy, soldBy);
+strcpy(temp->soldBy, soldBy);
 temp->price=price;
 temp->quanitiyInStock = quanitityInStock;
 
@@ -113,7 +113,7 @@ void readDataFile(struct produceItem **headRef)
         perror("Cannot Open File");
         exit(0);
     } else {
-    print("File Opened!");
+    printf("File Opened!");
             }
     while(fgets(dataLine, LENGTH, filePointer)!= NULL){
         produce = trim(strtok(dataLine, ","));
@@ -147,7 +147,7 @@ void recursiveReverse(struct produceItem** head_ref)
 
     // Reverse The rest list and put the first element at end
 
-    resursisveReverse(&rest);
+    recursiveReverse(&rest);
     first->next->next = first;
 
     // See Diagram
@@ -170,7 +170,7 @@ char * trim(char *c)
 
 void writeDataFile(struct produceItem *headRef)
 {
-    char *fileName = "RecitationFileOutput.txt";
+    char *fileName = "RecitationFiveOutput.txt";
     FILE *filePointer;
     int coutner = 1;
     struct produceItem *helper = headRef;
