@@ -18,7 +18,7 @@ struct produceItem *next;
 void addProduceItem ( struct produceItem**, char*, char*, char*,float, int);
 
 void count();
-void display(struct produceItem*);
+void display(struct produceItem**);
 void readDataFile(struct produceItem**);
 void recursiveReverse(struct produceItem**);
 char* trim(char * c);
@@ -41,7 +41,7 @@ while(choice != 5) {
 
         case 1: readDataFile(&head);
         break;
-        case 2: display(head);
+        case 2: display(&head);
         break;
         case 3: recursiveReverse(&head);
         break;
@@ -68,16 +68,19 @@ strcpy(temp->soldBy, soldBy);
 temp->price=price;
 temp->quanitiyInStock = quanitityInStock;
 
-temp->next= (*headRef);
-(*headRef)= temp;  // Move the Head to next node.
+printf("%-13s %-16s %-13s %6.2f %8d\n",
+    temp->produce, temp->type, temp->soldBy, temp->price, temp->quanitiyInStock);
+temp->next= *headRef;
+*headRef= temp;  // Move the Head to next node.
 return;
 }
 
-void display(struct produceItem *headRef)
+void display(struct produceItem **headRef)
 {
-    struct produceItem *helper= headRef;
-    if (helper = NULL)
+    struct produceItem *helper= *headRef;
+    if (helper == NULL)
     {
+        printf("Empty List\n");
         return;
     } else {
        printf("----------Display---------");
@@ -119,15 +122,17 @@ void readDataFile(struct produceItem **headRef)
     printf("\nFile Opened!\n");
             }
     while(fgets(dataLine, LENGTH, filePointer)!= NULL){
-        produce = trim(strtok(dataLine, ","));
-        type = trim(strtok(NULL, ","));
-        soldBy = trim(strtok(NULL,","));
-        price = atof(trim(strtok(NULL,",")));
-        quanitiyInStock = atoi(trim(strtok(NULL, ",")));
-        printf("Item Loaded! Tossing to ProduceItem List!");
+        produce = trim(strtok(dataLine, comma));
+        type = trim(strtok(NULL, comma));
+        soldBy = trim(strtok(NULL,comma));
+        price = atof(trim(strtok(NULL,comma)));
+        quanitiyInStock = atoi(trim(strtok(NULL, comma)));
+        /*
+        printf("%-13s %-16s %-13s %6.2f %8d\n",
+              produce, type, soldBy, price, quanitiyInStock);
+              */
 
         addProduceItem(headRef, produce, type, soldBy, price, quanitiyInStock);
-        printf("Item Loaded to List!");
     }//while
 fclose(filePointer);
 }
@@ -138,7 +143,7 @@ void recursiveReverse(struct produceItem** head_ref)
     struct produceItem* rest;
     //Empty List
 
-    if(*head_ref = NULL)
+    if(*head_ref == NULL)
     return;
 
     //suppose First 1,2,3 .. rest 2,3
@@ -162,12 +167,14 @@ void recursiveReverse(struct produceItem** head_ref)
 
 char * trim(char *c)
 {
+  /*
     char *e = c + strlen(c)-1; //Confusion
 
     while(*c && isspace(*c))
         c++;
     while(e>c && isspace(*e));
         *e-- = '\0';
+        */
     return c;
 }
 
@@ -192,7 +199,7 @@ void writeDataFile(struct produceItem *headRef)
         fprintf(filePointer, "------------Output-----)");
         while(helper != NULL)
         {
-            fprintf(filePointer, "%5d %3s %-13s %-16s %-16s %-13s %6.2f %8d\n",
+            fprintf(filePointer, "%5d %3s %-13s %-16s %-16s %6.2f %8d\n",
                     coutner++, " ", helper->produce, helper->type,helper->soldBy, helper->price, helper->quanitiyInStock);
                     helper = helper->next;
         }
